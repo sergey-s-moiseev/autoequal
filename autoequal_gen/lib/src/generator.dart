@@ -71,15 +71,29 @@ class AutoequalGenerator extends GeneratorForAnnotation<Autoequal> {
 
     final autoEqualFields = classElement.fields
         .where((field) => _isNotIgnoredField(field))
-        .map((e) => e.name);
+        .map((e) => _formatTemplate(e));
 
     return _AutoequalExtensionTemplate.generate(name, autoEqualFields);
+  }
+
+  String _formatTemplate(element) {
+    print('>>> ${element.name} :: ${typeNameOf(element.type)}');
+    switch (typeNameOf(element.type)) {
+      case 'String':
+        return "${element.name} ?? ''";
+      case 'int':
+        return '${element.name} ?? 0';
+      case 'bool':
+        return '${element.name} ?? false';
+      default:
+        return element.name;
+    }
   }
 
   bool _isNotIgnoredField(FieldElement element) => !(element.isStatic ||
       element.name == 'props' ||
       _ignore.hasAnnotationOfExact(element) ||
-      _ignore.hasAnnotationOfExact(element.getter));
+      _ignore.hasAnnotationOfExact(element.getter as Element));
 
   bool _isNotUseEquatable(ClassElement element) =>
       !(_isEquatable(element) || _isWithEquatableMixin(element));

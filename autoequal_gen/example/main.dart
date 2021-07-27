@@ -11,9 +11,5 @@ class ExampleClass extends Equatable with _$ExampleClassAutoequalMixin {
   @ignoreAutoequal
   final String? ignored;
 
-  ExampleClass({
-    required this.value,
-    this.ignored,
-    this.optional,
-  });
+  ExampleClass({required this.value, this.ignored, this.optional});
 }
